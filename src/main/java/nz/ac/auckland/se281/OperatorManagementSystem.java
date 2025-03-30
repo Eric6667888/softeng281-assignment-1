@@ -30,6 +30,7 @@ public class OperatorManagementSystem {
     for (String operator : this.operators) {
       if (operator.toLowerCase().contains(keyword.toLowerCase()) || keyword.equals("*")) {
         matchingCount++;
+        keywordCount++;
       }
     }
 
@@ -53,7 +54,14 @@ public class OperatorManagementSystem {
     if (keywordCount == 1) {
       MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
     } else if (keywordCount > 1) {
-      MessageCli.OPERATORS_FOUND.printMessage("are", "keywordCount", "s", ":");
+      MessageCli.OPERATORS_FOUND.printMessage("are", String.valueOf(keywordCount), "s", ":");
+    }
+
+    for (int i = 0; i < operators.size(); i++) {
+      if (operators.get(i).toLowerCase().contains(keyword.toLowerCase())) {
+        MessageCli.OPERATOR_ENTRY.printMessage(
+            operatorNameArray.get(i), operatorNumber.get(i), locationFullname.get(i));
+      }
     }
   }
 
@@ -93,14 +101,8 @@ public class OperatorManagementSystem {
         abbreviation + "-" + locationEnum.getLocationAbbreviation() + "-" + locationCountResult;
 
     // Print the Created Operator message(success message)
-    System.out.println(
-        "Successfully created operator '"
-            + operatorName
-            + "' ('"
-            + operatorNumber
-            + "') located in '"
-            + locationEnum.getFullName()
-            + "'.");
+    MessageCli.OPERATOR_CREATED.printMessage(
+        operatorName, operatorNumber, locationEnum.getFullName());
 
     // Create the operator in the system
     // Add the operator to the list of operators
