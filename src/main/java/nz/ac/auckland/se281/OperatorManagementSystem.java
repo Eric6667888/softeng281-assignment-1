@@ -1,18 +1,37 @@
 package nz.ac.auckland.se281;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class OperatorManagementSystem {
+  private Map<String, Integer> LocationCount = new HashMap<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
 
   public void searchOperators(String keyword) {
-    // TODO implement
+
     System.out.println("There are no matching operators found.");
   }
 
   public void createOperator(String operatorName, String location) {
-    // TODO implement
+
+    // Count the number of operators in the given location
+    int count = LocationCount.getOrDefault(location, 0) + 1;
+    LocationCount.put(location, count);
+
+    // Format the count to be 3 digits with leading zeros
+    String locationCount;
+    if (count <= 9) {
+      locationCount = "00" + count;
+    } else if (count <= 99) {
+      locationCount = "0" + count;
+    } else {
+      locationCount = "" + count;
+    }
+
     Types.Location locationEnum = Types.Location.fromString(location);
+    // Find the abbreviation of the operator name
     String[] words = operatorName.split(" ");
     StringBuilder abbreviation = new StringBuilder();
     for (String word : words) {
@@ -20,24 +39,20 @@ public class OperatorManagementSystem {
         abbreviation.append(word.charAt(0));
       }
     }
-    switch (locationEnum) {
-      case AKL:
-        System.out.println(
-            "Successfully created operator '"
-                + operatorName
-                + "' ('"
-                + abbreviation
-                + "-"
-                + locationEnum.getLocationAbbreviation()
-                + "-"
-                + "') located in '"
-                + locationEnum.getFullName()
-                + "'.");
-        break;
 
-      default:
-        break;
-    }
+    // Print the Created Operator message(success message)
+    System.out.println(
+        "Successfully created operator '"
+            + operatorName
+            + "' ('"
+            + abbreviation
+            + "-"
+            + locationEnum.getLocationAbbreviation()
+            + "-"
+            + locationCount
+            + "') located in '"
+            + locationEnum.getFullName()
+            + "'.");
   }
 
   public void viewActivities(String operatorId) {
