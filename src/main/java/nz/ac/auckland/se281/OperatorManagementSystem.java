@@ -1,33 +1,83 @@
 package nz.ac.auckland.se281;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 public class OperatorManagementSystem {
-  private Map<String, Integer> LocationCount = new HashMap<>();
+  private int locationCount = 0;
+  private ArrayList<String> operators = new ArrayList<>();
+  private ArrayList<String> operatorName = new ArrayList<>();
+  private ArrayList<String> operatorNumber = new ArrayList<>();
+  private ArrayList<String> locationFullname = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
 
   public void searchOperators(String keyword) {
+    keyword = keyword.trim(); // Remove leading and trailing spaces
+    // Check if the keyword is empty
+    int keywordCount = 0;
 
-    System.out.println("There are no matching operators found.");
+    if (keyword.isEmpty() || operators.isEmpty()) {
+      System.out.println("There are no matching operators found.");
+      return;
+    }
+
+    if (keyword.equals("*")) {
+      if (this.locationCount == 1) {
+        System.out.println("There is 1 matching operator found:");
+        System.out.println(
+            "  * "
+                + operatorName.get(0)
+                + " ('"
+                + operatorNumber.get(0)
+                + "' located in '"
+                + locationFullname.get(0)
+                + "')");
+
+      } else if (this.locationCount > 1) {
+        System.out.println("There are " + locationCount + " matching operators found:");
+        for (int i = 0; i < operators.size(); i++) {
+          System.out.println(
+              "  * "
+                  + operatorName.get(i)
+                  + " ('"
+                  + operatorNumber.get(i)
+                  + "' located in '"
+                  + locationFullname.get(i)
+                  + "')");
+        }
+      }
+
+      return;
+    }
+
+    for (String operator : this.operators) {
+      if (operator.toLowerCase().contains(keyword.toLowerCase())) {
+        keywordCount++;
+      }
+    }
+
+    if (keywordCount == 1) {
+      System.out.println("There is 1 matching operator found:");
+    } else if (keywordCount > 1) {
+      System.out.println("There are " + keywordCount + " matching operators found:");
+    }
   }
 
   public void createOperator(String operatorName, String location) {
 
     // Count the number of operators in the given location
-    int count = LocationCount.getOrDefault(location, 0) + 1;
-    LocationCount.put(location, count);
+    this.locationCount++;
+    int count = this.locationCount;
 
     // Format the count to be 3 digits with leading zeros
-    String locationCount;
+    String locationCountResult;
     if (count <= 9) {
-      locationCount = "00" + count;
+      locationCountResult = "00" + count;
     } else if (count <= 99) {
-      locationCount = "0" + count;
+      locationCountResult = "0" + count;
     } else {
-      locationCount = "" + count;
+      locationCountResult = "" + count;
     }
 
     Types.Location locationEnum = Types.Location.fromString(location);
@@ -40,19 +90,27 @@ public class OperatorManagementSystem {
       }
     }
 
+    String operatorNumber = new String();
+
+    operatorNumber =
+        abbreviation + "-" + locationEnum.getLocationAbbreviation() + "-" + locationCountResult;
+
     // Print the Created Operator message(success message)
     System.out.println(
         "Successfully created operator '"
             + operatorName
             + "' ('"
-            + abbreviation
-            + "-"
-            + locationEnum.getLocationAbbreviation()
-            + "-"
-            + locationCount
+            + operatorNumber
             + "') located in '"
             + locationEnum.getFullName()
             + "'.");
+
+    // Create the operator in the system
+    // Add the operator to the list of operators
+    this.operators.add(operatorName + " " + operatorNumber + " " + locationEnum.getFullName());
+    this.operatorName.add(operatorName);
+    this.operatorNumber.add(operatorNumber);
+    this.locationFullname.add(locationEnum.getFullName());
   }
 
   public void viewActivities(String operatorId) {
