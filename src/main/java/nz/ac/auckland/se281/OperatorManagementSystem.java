@@ -40,7 +40,7 @@ public class OperatorManagementSystem {
             operatorNameArray.get(0), operatorNumber.get(0), locationFullname.get(0));
 
       } else if (matchingCount > 1) {
-        MessageCli.OPERATORS_FOUND.printMessage("are", "locationCount", "s", ":");
+        MessageCli.OPERATORS_FOUND.printMessage("are", String.valueOf(matchingCount), "s", ":");
         for (int i = 0; i < operators.size(); i++) {
           MessageCli.OPERATOR_ENTRY.printMessage(
               operatorNameArray.get(i), operatorNumber.get(i), locationFullname.get(i));
