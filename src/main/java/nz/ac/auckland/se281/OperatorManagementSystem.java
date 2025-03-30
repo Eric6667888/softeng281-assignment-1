@@ -12,7 +12,32 @@ public class OperatorManagementSystem {
 
   public void createOperator(String operatorName, String location) {
     // TODO implement
-    System.out.println("Successfully created operator '" + operatorName + "'");
+    Types.Location locationEnum = Types.Location.fromString(location);
+    String[] words = operatorName.split(" ");
+    StringBuilder abbreviation = new StringBuilder();
+    for (String word : words) {
+      if (!word.isEmpty()) {
+        abbreviation.append(word.charAt(0));
+      }
+    }
+    switch (locationEnum) {
+      case AKL:
+        System.out.println(
+            "Successfully created operator '"
+                + operatorName
+                + "' ('"
+                + abbreviation
+                + "-"
+                + locationEnum.getLocationAbbreviation()
+                + "-"
+                + "') located in '"
+                + locationEnum.getFullName()
+                + "'.");
+        break;
+
+      default:
+        break;
+    }
   }
 
   public void viewActivities(String operatorId) {
