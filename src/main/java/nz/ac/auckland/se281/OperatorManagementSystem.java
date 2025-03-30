@@ -11,8 +11,8 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
-
     // TODO implement
+    System.out.println("Successfully created operator '" + operatorName + "'");
   }
 
   public void viewActivities(String operatorId) {
