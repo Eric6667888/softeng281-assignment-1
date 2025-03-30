@@ -1,9 +1,11 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OperatorManagementSystem {
-  private int locationCount = 0;
+  private Map<String, Integer> locationCounts = new HashMap<>();
   private ArrayList<String> operators = new ArrayList<>();
   private ArrayList<String> operatorNameArray = new ArrayList<>();
   private ArrayList<String> operatorNumber = new ArrayList<>();
@@ -22,55 +24,47 @@ public class OperatorManagementSystem {
       return;
     }
 
-    if (keyword.equals("*")) {
-      if (this.locationCount == 1) {
-        System.out.println("There is 1 matching operator found:");
-        System.out.println(
-            "  * "
-                + operatorNameArray.get(0)
-                + " ('"
-                + operatorNumber.get(0)
-                + "' located in '"
-                + locationFullname.get(0)
-                + "')");
+    // Count matching keywords
+    int matchingCount = 0;
 
-      } else if (this.locationCount > 1) {
-        System.out.println("There are " + locationCount + " matching operators found:");
+    for (String operator : this.operators) {
+      if (operator.toLowerCase().contains(keyword.toLowerCase()) || keyword.equals("*")) {
+        matchingCount++;
+      }
+    }
+
+    if (keyword.equals("*")) {
+      if (matchingCount == 1) {
+        MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
+        MessageCli.OPERATOR_ENTRY.printMessage(
+            operatorNameArray.get(0), operatorNumber.get(0), locationFullname.get(0));
+
+      } else if (matchingCount > 1) {
+        MessageCli.OPERATORS_FOUND.printMessage("are", "locationCount", "s", ":");
         for (int i = 0; i < operators.size(); i++) {
-          System.out.println(
-              "  * "
-                  + operatorNameArray.get(i)
-                  + " ('"
-                  + operatorNumber.get(i)
-                  + "' located in '"
-                  + locationFullname.get(i)
-                  + "')");
+          MessageCli.OPERATOR_ENTRY.printMessage(
+              operatorNameArray.get(i), operatorNumber.get(i), locationFullname.get(i));
         }
       }
 
       return;
     }
 
-    for (String operator : this.operators) {
-      if (operator.toLowerCase().contains(keyword.toLowerCase())) {
-        keywordCount++;
-      }
-    }
-
     if (keywordCount == 1) {
-      System.out.println("There is 1 matching operator found:");
+      MessageCli.OPERATORS_FOUND.printMessage("is", "1", "", ":");
     } else if (keywordCount > 1) {
-      System.out.println("There are " + keywordCount + " matching operators found:");
+      MessageCli.OPERATORS_FOUND.printMessage("are", "keywordCount", "s", ":");
     }
   }
 
   public void createOperator(String operatorName, String location) {
     Types.Location locationEnum = Types.Location.fromString(location);
+    String locationFull = locationEnum.getFullName();
 
     // Operator already Exist same location
     for (int i = 0; i < operators.size(); i++) {
       if (this.operatorNameArray.get(i).equals(operatorName)
-          && this.locationFullname.get(i).contains(location)) {
+          && this.locationFullname.get(i).equals(locationEnum.getFullName())) {
         MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
             operatorName, locationEnum.getFullName());
         return;
@@ -78,23 +72,11 @@ public class OperatorManagementSystem {
     }
 
     // Count the number of operators in the given location
-    int count = 1;
-    for (int i = 0; i < operators.size(); i++) {
-      if (this.locationFullname.get(i).contains(location)) {
-        count++;
-      }
-    }
-    this.locationCount++;
+    int count = locationCounts.getOrDefault(locationFull, 0) + 1;
+    locationCounts.put(locationFull, count);
 
     // Format the count to be 3 digits with leading zeros
-    String locationCountResult;
-    if (count <= 9) {
-      locationCountResult = "00" + count;
-    } else if (count <= 99) {
-      locationCountResult = "0" + count;
-    } else {
-      locationCountResult = "" + count;
-    }
+    String locationCountResult = String.format("%03d", count);
 
     // Find the abbreviation of the operator name
     String[] words = operatorName.split(" ");
