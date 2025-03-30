@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class OperatorManagementSystem {
   private int locationCount = 0;
   private ArrayList<String> operators = new ArrayList<>();
-  private ArrayList<String> operatorName = new ArrayList<>();
+  private ArrayList<String> operatorNameArray = new ArrayList<>();
   private ArrayList<String> operatorNumber = new ArrayList<>();
   private ArrayList<String> locationFullname = new ArrayList<>();
 
@@ -27,7 +27,7 @@ public class OperatorManagementSystem {
         System.out.println("There is 1 matching operator found:");
         System.out.println(
             "  * "
-                + operatorName.get(0)
+                + operatorNameArray.get(0)
                 + " ('"
                 + operatorNumber.get(0)
                 + "' located in '"
@@ -39,7 +39,7 @@ public class OperatorManagementSystem {
         for (int i = 0; i < operators.size(); i++) {
           System.out.println(
               "  * "
-                  + operatorName.get(i)
+                  + operatorNameArray.get(i)
                   + " ('"
                   + operatorNumber.get(i)
                   + "' located in '"
@@ -65,10 +65,26 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
+    Types.Location locationEnum = Types.Location.fromString(location);
+
+    // Operator already Exist same location
+    for (int i = 0; i < operators.size(); i++) {
+      if (this.operatorNameArray.get(i).equals(operatorName)
+          && this.locationFullname.get(i).contains(location)) {
+        MessageCli.OPERATOR_NOT_CREATED_ALREADY_EXISTS_SAME_LOCATION.printMessage(
+            operatorName, locationEnum.getFullName());
+        return;
+      }
+    }
 
     // Count the number of operators in the given location
+    int count = 1;
+    for (int i = 0; i < operators.size(); i++) {
+      if (this.locationFullname.get(i).contains(location)) {
+        count++;
+      }
+    }
     this.locationCount++;
-    int count = this.locationCount;
 
     // Format the count to be 3 digits with leading zeros
     String locationCountResult;
@@ -80,7 +96,6 @@ public class OperatorManagementSystem {
       locationCountResult = "" + count;
     }
 
-    Types.Location locationEnum = Types.Location.fromString(location);
     // Find the abbreviation of the operator name
     String[] words = operatorName.split(" ");
     StringBuilder abbreviation = new StringBuilder();
@@ -108,7 +123,7 @@ public class OperatorManagementSystem {
     // Create the operator in the system
     // Add the operator to the list of operators
     this.operators.add(operatorName + " " + operatorNumber + " " + locationEnum.getFullName());
-    this.operatorName.add(operatorName);
+    this.operatorNameArray.add(operatorName);
     this.operatorNumber.add(operatorNumber);
     this.locationFullname.add(locationEnum.getFullName());
   }
