@@ -71,6 +71,11 @@ public class OperatorManagementSystem {
 
   public void createOperator(String operatorName, String location) {
 
+    if (operatorName.length() < 3) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_OPERATOR_NAME.printMessage(operatorName);
+      return;
+    }
+
     int whetherHasLocation = 0;
     for (Types.Location loc : Types.Location.values()) {
       if (loc.getNameEnglish().equalsIgnoreCase(location)
