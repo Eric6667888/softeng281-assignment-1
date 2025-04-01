@@ -20,7 +20,7 @@ public class OperatorManagementSystem {
     int keywordCount = 0;
 
     if (keyword.isEmpty() || operators.isEmpty()) {
-      System.out.println("There are no matching operators found.");
+      MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
       return;
     }
 
@@ -62,6 +62,10 @@ public class OperatorManagementSystem {
         MessageCli.OPERATOR_ENTRY.printMessage(
             operatorNameArray.get(i), operatorNumber.get(i), locationFullname.get(i));
       }
+    }
+
+    if (keywordCount == 0) {
+      MessageCli.OPERATORS_FOUND.printMessage("are", "no", "s", ".");
     }
   }
 
