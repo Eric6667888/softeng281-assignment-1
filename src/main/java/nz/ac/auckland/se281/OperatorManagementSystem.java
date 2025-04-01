@@ -70,6 +70,20 @@ public class OperatorManagementSystem {
   }
 
   public void createOperator(String operatorName, String location) {
+
+    int whetherHasLocation = 0;
+    for (Types.Location loc : Types.Location.values()) {
+      if (loc.getNameEnglish().equalsIgnoreCase(location)
+          || loc.getNameTeReo().equalsIgnoreCase(location)
+          || loc.getLocationAbbreviation().equalsIgnoreCase(location)) {
+        whetherHasLocation++;
+      }
+    }
+    if (whetherHasLocation == 0) {
+      MessageCli.OPERATOR_NOT_CREATED_INVALID_LOCATION.printMessage(location);
+      return;
+    }
+
     Types.Location locationEnum = Types.Location.fromString(location);
     String locationFull = locationEnum.getFullName();
 
