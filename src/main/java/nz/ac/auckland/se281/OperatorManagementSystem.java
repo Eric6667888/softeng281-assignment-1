@@ -6,10 +6,12 @@ import java.util.Map;
 
 public class OperatorManagementSystem {
   private Map<String, Integer> locationCounts = new HashMap<>();
+  private Map<String, Integer> activityCounts = new HashMap<>();
   private ArrayList<String> operators = new ArrayList<>();
   private ArrayList<String> operatorNameArray = new ArrayList<>();
   private ArrayList<String> operatorNumber = new ArrayList<>();
   private ArrayList<String> locationFullname = new ArrayList<>();
+  private ArrayList<String> activityNumber = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -150,6 +152,26 @@ public class OperatorManagementSystem {
       MessageCli.ACTIVITY_NOT_CREATED_INVALID_OPERATOR_ID.printMessage(operatorId);
       return;
     }
+
+    int operatorPosition = 0;
+
+    for (int i = 0; i < operatorNumber.size(); i++) {
+      if (operatorNumber.get(i).equalsIgnoreCase(operatorId)) {
+        operatorPosition = i;
+        break;
+
+      }
+
+    }
+
+    int count = activityCounts.getOrDefault(operatorId, 0) + 1;
+    activityCounts.put(operatorId, count);
+    String activityCountResult = String.format("%03d", count);
+    
+    activityNumber.add(operatorId + "-" + activityCountResult + ": " + activityType);
+    MessageCli.ACTIVITY_CREATED.printMessage(activityName, operatorId + "-" + activityCountResult, activityType, operatorNameArray.get(operatorPosition));
+
+
   }
 
   public void searchActivities(String keyword) {
