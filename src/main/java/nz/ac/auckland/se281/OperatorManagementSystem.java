@@ -252,8 +252,45 @@ public class OperatorManagementSystem {
       }
       return;
     }
+
+    if (!(keyword.trim().equals("*"))) {
+      int count = 0;
+      for (int i = 0; i < activityNumber.size(); i++) {
+        String [] parts = activityNumber.get(i).split(": ");
+        String activityId = parts[0];
+        String activityType = parts[1];
+        String[] operatorParts = activityId.split("-");
+        String operatorId = operatorParts[0];
+        String operatorFullName = operatorsNameMap.get(operatorId);
+        if (activityNumber.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
+          count++;
+        }
+      }
+      if (count == 1) {
+        MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+      } else if (count > 1) {
+        MessageCli.ACTIVITIES_FOUND.printMessage("are", String.valueOf(count), "ies", ":");
+      } else {
+        MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+        return;
+      }
+
+      for (int i = 0; i < activityNumber.size(); i++) {
+        String [] parts = activityNumber.get(i).split(": ");
+        String activityId = parts[0];
+        String activityType = parts[1];
+        String[] operatorParts = activityId.split("-");
+        String operatorId = operatorParts[0];
+        String operatorFullName = operatorsNameMap.get(operatorId);
+        if (activityNumber.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
+          MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorFullName);
+        }
+          
+        }
+      }
+    }
     
-  }
+  
 
   public void addPublicReview(String activityId, String[] options) {
     // TODO implement
