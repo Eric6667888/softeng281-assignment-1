@@ -262,7 +262,7 @@ public class OperatorManagementSystem {
         String[] operatorParts = activityId.split("-");
         String operatorId = operatorParts[0];
         String operatorFullName = operatorsNameMap.get(operatorId);
-        if (activityNumber.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
+        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
           count++;
         }
       }
@@ -282,7 +282,7 @@ public class OperatorManagementSystem {
         String[] operatorParts = activityId.split("-");
         String operatorId = operatorParts[0];
         String operatorFullName = operatorsNameMap.get(operatorId);
-        if (activityNumber.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
+        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
           MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorFullName);
         }
           
