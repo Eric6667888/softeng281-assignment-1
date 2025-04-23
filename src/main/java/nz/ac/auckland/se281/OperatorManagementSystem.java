@@ -256,13 +256,23 @@ public class OperatorManagementSystem {
     if (!(keyword.trim().equals("*"))) {
       int count = 0;
       for (int i = 0; i < activityNumber.size(); i++) {
+
         String [] parts = activityNumber.get(i).split(": ");
         String activityId = parts[0];
         String activityType = parts[1];
-        String[] operatorParts = activityId.split("-");
+
+        String [] operatorParts = activityId.split("-");
         String operatorId = operatorParts[0];
         String operatorFullName = operatorsNameMap.get(operatorId);
-        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
+
+        String locationabbreviation = operatorParts[1];
+        Types.Location locationEnum = Types.Location.fromString(locationabbreviation);
+
+        
+        
+
+
+        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword) || locationEnum.getFullName().contains(keyword)) {
           count++;
         }
       }
@@ -282,7 +292,10 @@ public class OperatorManagementSystem {
         String[] operatorParts = activityId.split("-");
         String operatorId = operatorParts[0];
         String operatorFullName = operatorsNameMap.get(operatorId);
-        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)) {
+
+        String locationabbreviation = operatorParts[1];
+        Types.Location locationEnum = Types.Location.fromString(locationabbreviation);
+        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)  || locationEnum.getFullName().contains(keyword)) {
           MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorFullName);
         }
           
