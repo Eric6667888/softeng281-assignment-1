@@ -7,6 +7,7 @@ import java.util.Map;
 public class OperatorManagementSystem {
   private Map<String, Integer> locationCounts = new HashMap<>();
   private Map<String, Integer> activityCounts = new HashMap<>();
+  private Map<String, String> operatorsNameMap = new HashMap<>();
   private ArrayList<String> operators = new ArrayList<>();
   private ArrayList<String> operatorNameArray = new ArrayList<>();
   private ArrayList<String> operatorNumber = new ArrayList<>();
@@ -109,6 +110,8 @@ public class OperatorManagementSystem {
     int count = locationCounts.getOrDefault(locationFull, 0) + 1;
     locationCounts.put(locationFull, count);
 
+    
+
     // Format the count to be 3 digits with leading zeros
     String locationCountResult = String.format("%03d", count);
 
@@ -136,6 +139,8 @@ public class OperatorManagementSystem {
     this.operatorNameArray.add(operatorName);
     this.operatorNumber.add(operatorNumber);
     this.locationFullname.add(locationEnum.getFullName());
+
+    operatorsNameMap.put(abbreviation.toString(), operatorName);
   }
 
   public void viewActivities(String operatorId) {
@@ -220,6 +225,31 @@ public class OperatorManagementSystem {
   public void searchActivities(String keyword) {
     if (keyword.isEmpty() || activityNumber.isEmpty()) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    }
+
+    if (keyword.trim().equals("*")) {
+      int count = 0;
+      for (int i = 0; i < activityNumber.size(); i++) {
+        count++;
+      }
+      if (count == 1) {
+        MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+      } else {
+        MessageCli.ACTIVITIES_FOUND.printMessage("are", String.valueOf(count), "ies", ":");
+      }
+
+      for (int i = 0; i < activityNumber.size(); i++) {
+        
+        String[] parts = activityNumber.get(i).split(": ");
+        String activityId = parts[0];
+        String activityType = parts[1];
+        String[] operatorParts = activityId.split("-");
+        String operatorId = operatorParts[0];
+        
+        String operatorFullName = operatorsNameMap.get(operatorId);
+        MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorFullName);
+      }
       return;
     }
     
