@@ -223,6 +223,8 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
+    keyword = keyword.trim(); // Remove leading and trailing spaces
+    // Check if the keyword is empty
     if (keyword.isEmpty() || activityNumber.isEmpty()) {
       MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
       return;
@@ -272,7 +274,7 @@ public class OperatorManagementSystem {
         
 
 
-        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword) || locationEnum.getFullName().contains(keyword)) {
+        if (activityName.get(i).toLowerCase().contains(keyword.toLowerCase()) || activityId.toLowerCase().contains(keyword.toLowerCase()) || activityType.toLowerCase().contains(keyword.toLowerCase()) || operatorFullName.toLowerCase().contains(keyword.toLowerCase())  || locationEnum.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
           count++;
         }
       }
@@ -295,7 +297,7 @@ public class OperatorManagementSystem {
 
         String locationabbreviation = operatorParts[1];
         Types.Location locationEnum = Types.Location.fromString(locationabbreviation);
-        if (activityName.get(i).contains(keyword) || activityId.contains(keyword) || activityType.contains(keyword) || operatorFullName.contains(keyword)  || locationEnum.getFullName().contains(keyword)) {
+        if (activityName.get(i).toLowerCase().contains(keyword.toLowerCase()) || activityId.toLowerCase().contains(keyword.toLowerCase()) || activityType.toLowerCase().contains(keyword.toLowerCase()) || operatorFullName.toLowerCase().contains(keyword.toLowerCase())  || locationEnum.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
           MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorFullName);
         }
           
