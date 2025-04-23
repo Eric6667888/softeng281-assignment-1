@@ -218,7 +218,11 @@ public class OperatorManagementSystem {
   }
 
   public void searchActivities(String keyword) {
-    // TODO implement
+    if (keyword.isEmpty() || activityNumber.isEmpty()) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    }
+    
   }
 
   public void addPublicReview(String activityId, String[] options) {
