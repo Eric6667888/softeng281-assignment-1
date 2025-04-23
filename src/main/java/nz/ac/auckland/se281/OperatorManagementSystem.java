@@ -138,10 +138,36 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
+    int count = 0;
+    operatorId = operatorId.trim(); // Remove leading and trailing spaces
     if (!(operatorNumber.contains(operatorId))) {
       MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
       return;
     }
+
+    for (int i = 0; i < activityNumber.size(); i++) {
+      if (activityNumber.get(i).contains(operatorId)) {
+        count++;
+        
+      }
+    }
+    if (count == 0) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", "no", "ies", ".");
+      return;
+    } else if (count == 1) {
+      MessageCli.ACTIVITIES_FOUND.printMessage("is", "1", "y", ":");
+    } else {
+      MessageCli.ACTIVITIES_FOUND.printMessage("are", String.valueOf(count), "ies", ":");
+    }
+    for (int i = 0; i < activityNumber.size(); i++) {
+      if (activityNumber.get(i).contains(operatorId)) {
+        String[] parts = activityNumber.get(i).split(": ");
+        String activityId = parts[0];
+        String activityType = parts[1];
+        MessageCli.ACTIVITY_ENTRY.printMessage(activityId, operatorId, activityType, operatorId);
+      }
+    }
+
 
     
   }
