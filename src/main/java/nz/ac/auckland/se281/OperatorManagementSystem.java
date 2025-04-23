@@ -12,6 +12,7 @@ public class OperatorManagementSystem {
   private ArrayList<String> operatorNumber = new ArrayList<>();
   private ArrayList<String> locationFullname = new ArrayList<>();
   private ArrayList<String> activityNumber = new ArrayList<>();
+  private ArrayList<String> activityName = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -161,10 +162,20 @@ public class OperatorManagementSystem {
     }
     for (int i = 0; i < activityNumber.size(); i++) {
       if (activityNumber.get(i).contains(operatorId)) {
+        int operatorPosition = 0;
+
+        for (int o = 0; o < operatorNumber.size(); o++) {
+          if (operatorNumber.get(o).equals(operatorId)) {
+            operatorPosition = o;
+            break;
+
+          }
+
+        }
         String[] parts = activityNumber.get(i).split(": ");
         String activityId = parts[0];
         String activityType = parts[1];
-        MessageCli.ACTIVITY_ENTRY.printMessage(activityId, operatorId, activityType, operatorId);
+        MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorNameArray.get(operatorPosition));
       }
     }
 
@@ -187,7 +198,7 @@ public class OperatorManagementSystem {
     int operatorPosition = 0;
 
     for (int i = 0; i < operatorNumber.size(); i++) {
-      if (operatorNumber.get(i).equalsIgnoreCase(operatorId)) {
+      if (operatorNumber.get(i).equals(operatorId)) {
         operatorPosition = i;
         break;
 
@@ -198,7 +209,8 @@ public class OperatorManagementSystem {
     int count = activityCounts.getOrDefault(operatorId, 0) + 1;
     activityCounts.put(operatorId, count);
     String activityCountResult = String.format("%03d", count);
-    
+
+    this.activityName.add(activityName);
     activityNumber.add(operatorId + "-" + activityCountResult + ": " + activityType);
     MessageCli.ACTIVITY_CREATED.printMessage(activityName, operatorId + "-" + activityCountResult, activityType, operatorNameArray.get(operatorPosition));
 
