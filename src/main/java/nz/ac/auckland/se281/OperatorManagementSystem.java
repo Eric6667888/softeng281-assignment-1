@@ -138,6 +138,11 @@ public class OperatorManagementSystem {
   }
 
   public void viewActivities(String operatorId) {
+    if (!(operatorNumber.contains(operatorId))) {
+      MessageCli.OPERATOR_NOT_FOUND.printMessage(operatorId);
+      return;
+    }
+
     
   }
 
