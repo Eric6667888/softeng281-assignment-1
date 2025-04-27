@@ -5,16 +5,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class OperatorManagementSystem {
-  private Map<String, Integer> locationCounts = new HashMap<>();
-  private Map<String, Integer> activityCounts = new HashMap<>();
-  private Map<String, String> operatorsNameMap = new HashMap<>();
-  private Map<String, Integer> reviewCount = new HashMap<>();
-  private Map<String, String[]> reviewInformation = new HashMap<>();
-  private ArrayList<String> operators = new ArrayList<>();
-  private ArrayList<String> operatorNameArray = new ArrayList<>();
-  private ArrayList<String> operatorNumber = new ArrayList<>();
-  private ArrayList<String> locationFullname = new ArrayList<>();
-  private ArrayList<String> activityNumber = new ArrayList<>();
+  private Map<String, Integer> locationCounts = new HashMap<>(); // locationFullname, operator count
+  private Map<String, Integer> activityCounts = new HashMap<>(); // operatorID, activity count
+  private Map<String, String> activityIDName = new HashMap<>(); // activityID, activity name
+  private Map<String, String> operatorsNameMap = new HashMap<>(); // operator abbreviation, operator name
+  private Map<String, Integer> reviewCount = new HashMap<>(); // activityID, review count
+  private Map<String, String[]> reviewInformation = new HashMap<>(); // reviewID, review information
+  private Map<String, String> reviewType = new HashMap<>(); // reviewID, type
+
+
+  private ArrayList<String> operators = new ArrayList<>(); // operatorName operatorNumber locationFullname
+  private ArrayList<String> operatorNameArray = new ArrayList<>(); // operatorName
+  private ArrayList<String> operatorNumber = new ArrayList<>(); // operatorNumber
+  private ArrayList<String> locationFullname = new ArrayList<>(); // locationFullname
+  private ArrayList<String> activityNumber = new ArrayList<>(); //
   private ArrayList<String> activityName = new ArrayList<>();
   private ArrayList<String> reviewId = new ArrayList<>();
 
@@ -218,6 +222,8 @@ public class OperatorManagementSystem {
     activityCounts.put(operatorId, count);
     String activityCountResult = String.format("%03d", count);
 
+    activityIDName.put(operatorId + "-" + activityCountResult, activityName);
+
     this.activityName.add(activityName);
     activityNumber.add(operatorId + "-" + activityCountResult + ": " + activityType);
     MessageCli.ACTIVITY_CREATED.printMessage(activityName, operatorId + "-" + activityCountResult, activityType, operatorNameArray.get(operatorPosition));
@@ -337,16 +343,16 @@ public class OperatorManagementSystem {
 
     reviewInformation.put(reviewId, options);
 
+    reviewType.put(reviewId, "Public");
+
 
       
       
-    String[] operatorParts = activityId.split("-");
-    String operatorId = operatorParts[0];
-    String operatorFullName = operatorsNameMap.get(operatorId);
+    
 
 
     // Print the Created Operator message(success message)
-    MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, operatorFullName);
+    MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, activityIDName.get(activityId));
     
     
   }
@@ -377,12 +383,12 @@ public class OperatorManagementSystem {
 
     reviewInformation.put(reviewId, options);
 
-    String[] operatorParts = activityId.split("-");
-    String operatorId = operatorParts[0];
-    String operatorFullName = operatorsNameMap.get(operatorId);
+    reviewType.put(reviewId, "Private");
+
+    
 
     // Print the Created Operator message(success message)
-    MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, operatorFullName);
+    MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, activityIDName.get(activityId));
   }
 
   public void addExpertReview(String activityId, String[] options) {
@@ -411,12 +417,12 @@ public class OperatorManagementSystem {
 
     reviewInformation.put(reviewId, options);
 
-    String[] operatorParts = activityId.split("-");
-    String operatorId = operatorParts[0];
-    String operatorFullName = operatorsNameMap.get(operatorId);
+    reviewType.put(reviewId, "Expert");
+
+    
 
     // Print the Created Operator message(success message)
-    MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, operatorFullName);
+    MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, activityIDName.get(activityId));
   }
 
   public void displayReviews(String activityId) {
