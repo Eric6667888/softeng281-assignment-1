@@ -517,6 +517,9 @@ public class OperatorManagementSystem {
             }
             return;
           } else if (reviewInfo[3].equals("n")) {
+            if (reviewImage.get(reviewId) != null) {
+              MessageCli.REVIEW_ENTRY_IMAGES.printMessage(reviewImage.get(reviewId));
+            }
             return;
           }
           
