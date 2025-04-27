@@ -14,6 +14,7 @@ public class OperatorManagementSystem {
   private Map<String, String> reviewType = new HashMap<>(); // reviewID, type
   private Map<String, Boolean> reviewEndorse = new HashMap<>(); // reviewID, endorsement status
   private Map<String, String> reviewResponse = new HashMap<>(); // reviewID, Response
+  private Map<String, String> reviewImage = new HashMap<>(); // reviewID, image name
 
 
   private ArrayList<String> operators = new ArrayList<>(); // operatorName operatorNumber locationFullname
@@ -23,6 +24,8 @@ public class OperatorManagementSystem {
   private ArrayList<String> activityNumber = new ArrayList<>(); //
   private ArrayList<String> activityName = new ArrayList<>();
   private ArrayList<String> reviewId = new ArrayList<>();
+
+  
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -509,6 +512,9 @@ public class OperatorManagementSystem {
           MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[2]);
           if (reviewInfo[3].equals("y")) {
             MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage();
+            if (reviewImage.get(reviewId) != null) {
+              MessageCli.REVIEW_ENTRY_IMAGES.printMessage(reviewImage.get(reviewId));
+            }
             return;
           } else if (reviewInfo[3].equals("n")) {
             return;
@@ -563,7 +569,34 @@ public class OperatorManagementSystem {
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
-    // TODO implement
+    int reviewCount = 0;
+    for (int i = 0; i < this.reviewId.size(); i++) {
+      if (this.reviewId.get(i).equals(reviewId)) {
+        reviewCount++;
+      }
+    }
+    if (reviewCount == 0) {
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
+
+    if (!(reviewType.get(reviewId).equals("Expert"))) {
+      MessageCli.REVIEW_IMAGE_NOT_ADDED_NOT_EXPERT.printMessage(reviewId);
+      return;
+    }
+
+    if (reviewImage.get(reviewId) == null) {
+      reviewImage.put(reviewId, imageName);
+    } else {
+      String existingImage = reviewImage.get(reviewId);
+      reviewImage.put(reviewId, existingImage + ", " + imageName);
+
+    }
+
+
+    MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
+
+    
   }
 
   public void displayTopActivities() {
