@@ -13,6 +13,7 @@ public class OperatorManagementSystem {
   private Map<String, String[]> reviewInformation = new HashMap<>(); // reviewID, review information
   private Map<String, String> reviewType = new HashMap<>(); // reviewID, type
   private Map<String, Boolean> reviewEndorse = new HashMap<>(); // reviewID, endorsement status
+  private Map<String, String> reviewResponse = new HashMap<>(); // reviewID, Response
 
 
   private ArrayList<String> operators = new ArrayList<>(); // operatorName operatorNumber locationFullname
@@ -488,13 +489,20 @@ public class OperatorManagementSystem {
         } else if (reviewType.equals("Private")) {
           MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
           MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
-          if (reviewInfo[4].equals("y")) {
-            MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(reviewInfo[1]);
-            return;
-          } else if (reviewInfo[4].equals("n")) {
-            MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
+          if (reviewResponse.get(reviewId) == null) {
+            if (reviewInfo[4].equals("y")) {
+              MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(reviewInfo[1]);
+              return;
+            } else if (reviewInfo[4].equals("n")) {
+              MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
+              return;
+            }
+
+          } else {
+            MessageCli.REVIEW_ENTRY_RESOLVED.printMessage(reviewResponse.get(reviewId));
             return;
           }
+          
             
         } else if (reviewType.equals("Expert")) {
           MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[1], "5", reviewType, reviewId, reviewInfo[0]);
@@ -549,7 +557,8 @@ public class OperatorManagementSystem {
       return;
     }
 
-    
+    reviewResponse.put(reviewId, response);
+    MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
     
   }
 
