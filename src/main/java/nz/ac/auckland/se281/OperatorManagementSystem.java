@@ -12,6 +12,7 @@ public class OperatorManagementSystem {
   private Map<String, Integer> reviewCount = new HashMap<>(); // activityID, review count
   private Map<String, String[]> reviewInformation = new HashMap<>(); // reviewID, review information
   private Map<String, String> reviewType = new HashMap<>(); // reviewID, type
+  private Map<String, Boolean> reviewEndorse = new HashMap<>(); // reviewID, endorsement status
 
 
   private ArrayList<String> operators = new ArrayList<>(); // operatorName operatorNumber locationFullname
@@ -345,6 +346,8 @@ public class OperatorManagementSystem {
 
     reviewType.put(reviewId, "Public");
 
+    reviewEndorse.put(reviewId, false);
+
 
       
       
@@ -469,11 +472,17 @@ public class OperatorManagementSystem {
           if (reviewInfo[1].equals("n")) {
             MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
             MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
+            if (reviewEndorse.get(reviewId)) {
+              MessageCli.REVIEW_ENTRY_ENDORSED.printMessage();
+            }
             return;
           }
           if (reviewInfo[1].equals("y")) {
             MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, "Anonymous");
-            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);            
+            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
+            if (reviewEndorse.get(reviewId)) {
+              MessageCli.REVIEW_ENTRY_ENDORSED.printMessage();
+            }
             return;
           }
         } else if (reviewType.equals("Private")) {
@@ -503,7 +512,24 @@ public class OperatorManagementSystem {
   }
 
   public void endorseReview(String reviewId) {
-    // TODO implement
+    int reviewCount = 0;
+    for (int i = 0; i < this.reviewId.size(); i++) {
+      if (this.reviewId.get(i).equals(reviewId)) {
+        reviewCount++;
+      }
+    }
+    if (reviewCount == 0) {
+      MessageCli.REVIEW_NOT_FOUND.printMessage(reviewId);
+      return;
+    }
+
+    if (!(reviewType.get(reviewId).equals("Public"))) {
+      MessageCli.REVIEW_NOT_ENDORSED.printMessage(reviewId);
+      return;
+    }
+
+    reviewEndorse.put(reviewId, true);
+    MessageCli.REVIEW_ENDORSED.printMessage(reviewId);      
   }
 
   public void resolveReview(String reviewId, String response) {
