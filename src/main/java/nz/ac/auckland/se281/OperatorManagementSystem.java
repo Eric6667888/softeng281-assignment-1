@@ -453,9 +453,52 @@ public class OperatorManagementSystem {
       MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityIDName.get(activityId));
       return;
     } else if (reviewCount == 1) {
-      MessageCli.REVIEWS_FOUND.printMessage("is", "1", "s", activityIDName.get(activityId));
+      MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityIDName.get(activityId));
     } else {
       MessageCli.REVIEWS_FOUND.printMessage("are", String.valueOf(reviewCount), "s", activityIDName.get(activityId));
+    }
+
+    for (int i = 0; i < this.reviewId.size(); i++) {
+      String [] parts = this.reviewId.get(i).split("-R");
+      String activityId1 = parts[0];
+      if (activityId1.equals(activityId)) {
+        String reviewId = this.reviewId.get(i);
+        String[] reviewInfo = reviewInformation.get(reviewId);
+        String reviewType = this.reviewType.get(reviewId);
+        if (reviewType.equals("Public")) {
+          if (reviewInfo[1].equals("n")) {
+            MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
+            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
+            return;
+          }
+          if (reviewInfo[1].equals("y")) {
+            MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, "Anonymous");
+            MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);            
+            return;
+          }
+        } else if (reviewType.equals("Private")) {
+          MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
+          MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
+          if (reviewInfo[4].equals("y")) {
+            MessageCli.REVIEW_ENTRY_FOLLOW_UP.printMessage(reviewInfo[1]);
+            return;
+          } else if (reviewInfo[4].equals("n")) {
+            MessageCli.REVIEW_ENTRY_RESOLVED.printMessage("-");
+            return;
+          }
+            
+        } else if (reviewType.equals("Expert")) {
+          MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[1], "5", reviewType, reviewId, reviewInfo[0]);
+          MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[2]);
+          if (reviewInfo[3].equals("y")) {
+            MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage();
+            return;
+          } else if (reviewInfo[3].equals("n")) {
+            return;
+          }
+          
+        }
+      }
     }
   }
 
