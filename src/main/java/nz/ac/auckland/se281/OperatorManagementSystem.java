@@ -640,12 +640,14 @@ public class OperatorManagementSystem {
 
         count++;
       }
-      averageRating /= count;
+      if (count > 0) {
+        averageRating = averageRating / count;
+      }
 
       if (count == 0) {
         MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(locationFullName);
       } else {
-        MessageCli.TOP_ACTIVITY.printMessage(topActivity, String.valueOf(averageRating));
+        MessageCli.TOP_ACTIVITY.printMessage(locationFullName, topActivity, String.valueOf(averageRating));
       }
     }
   }
