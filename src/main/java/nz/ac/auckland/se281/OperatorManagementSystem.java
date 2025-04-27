@@ -8,12 +8,15 @@ public class OperatorManagementSystem {
   private Map<String, Integer> locationCounts = new HashMap<>();
   private Map<String, Integer> activityCounts = new HashMap<>();
   private Map<String, String> operatorsNameMap = new HashMap<>();
+  private Map<String, Integer> reviewCount = new HashMap<>();
+  private Map<String, String[]> reviewInformation = new HashMap<>();
   private ArrayList<String> operators = new ArrayList<>();
   private ArrayList<String> operatorNameArray = new ArrayList<>();
   private ArrayList<String> operatorNumber = new ArrayList<>();
   private ArrayList<String> locationFullname = new ArrayList<>();
   private ArrayList<String> activityNumber = new ArrayList<>();
   private ArrayList<String> activityName = new ArrayList<>();
+  private ArrayList<String> reviewId = new ArrayList<>();
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -308,6 +311,8 @@ public class OperatorManagementSystem {
   
 
   public void addPublicReview(String activityId, String[] options) {
+    // Check if the activity ID is valid
+    // If not, print an error message and return
     int activityCount = 0;
     for (int i = 0; i < activityNumber.size(); i++) {
       String [] parts = activityNumber.get(i).split(": ");
@@ -320,11 +325,35 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
+    
+    // Check if the rating is between 1 and 5
+    // If not, set it to 1 or 5 accordingly
+    
+    int count = reviewCount.getOrDefault(activityId, 0) + 1;
+    reviewCount.put(activityId, count);
+    
+    this.reviewId.add(activityId + "-R" + count);
+    String reviewId = activityId + "-R" + count;
+
+    reviewInformation.put(reviewId, options);
+
+
+      
+      
+    String[] operatorParts = activityId.split("-");
+    String operatorId = operatorParts[0];
+    String operatorFullName = operatorsNameMap.get(operatorId);
+
+
+    // Print the Created Operator message(success message)
+    MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, operatorFullName);
     
     
   }
 
   public void addPrivateReview(String activityId, String[] options) {
+    // Check if the activity ID is valid
+    // If not, print an error message and return
     int activityCount = 0;
     for (int i = 0; i < activityNumber.size(); i++) {
       String [] parts = activityNumber.get(i).split(": ");
@@ -337,9 +366,28 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
+    // Check if the rating is between 1 and 5
+    // If not, set it to 1 or 5 accordingly
+    
+    int count = reviewCount.getOrDefault(activityId, 0) + 1;
+    reviewCount.put(activityId, count);
+    
+    this.reviewId.add(activityId + "-R" + count);
+    String reviewId = activityId + "-R" + count;
+
+    reviewInformation.put(reviewId, options);
+
+    String[] operatorParts = activityId.split("-");
+    String operatorId = operatorParts[0];
+    String operatorFullName = operatorsNameMap.get(operatorId);
+
+    // Print the Created Operator message(success message)
+    MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, operatorFullName);
   }
 
   public void addExpertReview(String activityId, String[] options) {
+    // Check if the activity ID is valid
+    // If not, print an error message and return
     int activityCount = 0;
     for (int i = 0; i < activityNumber.size(); i++) {
       String [] parts = activityNumber.get(i).split(": ");
@@ -352,6 +400,23 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
+    // Check if the rating is between 1 and 5
+    // If not, set it to 1 or 5 accordingly
+    
+    int count = reviewCount.getOrDefault(activityId, 0) + 1;
+    reviewCount.put(activityId, count);
+    
+    this.reviewId.add(activityId + "-R" + count);
+    String reviewId = activityId + "-R" + count;
+
+    reviewInformation.put(reviewId, options);
+
+    String[] operatorParts = activityId.split("-");
+    String operatorId = operatorParts[0];
+    String operatorFullName = operatorsNameMap.get(operatorId);
+
+    // Print the Created Operator message(success message)
+    MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, operatorFullName);
   }
 
   public void displayReviews(String activityId) {
