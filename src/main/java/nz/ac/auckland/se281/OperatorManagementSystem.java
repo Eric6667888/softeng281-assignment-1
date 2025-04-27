@@ -308,15 +308,50 @@ public class OperatorManagementSystem {
   
 
   public void addPublicReview(String activityId, String[] options) {
-    // TODO implement
+    int activityCount = 0;
+    for (int i = 0; i < activityNumber.size(); i++) {
+      String [] parts = activityNumber.get(i).split(": ");
+      String activityId1 = parts[0];
+      if (activityId1.equals(activityId)) {
+        activityCount++;
+      }
+    }
+    if (activityCount == 0) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+    
+    
   }
 
   public void addPrivateReview(String activityId, String[] options) {
-    // TODO implement
+    int activityCount = 0;
+    for (int i = 0; i < activityNumber.size(); i++) {
+      String [] parts = activityNumber.get(i).split(": ");
+      String activityId1 = parts[0];
+      if (activityId1.equals(activityId)) {
+        activityCount++;
+      }
+    }
+    if (activityCount == 0) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
   }
 
   public void addExpertReview(String activityId, String[] options) {
-    // TODO implement
+    int activityCount = 0;
+    for (int i = 0; i < activityNumber.size(); i++) {
+      String [] parts = activityNumber.get(i).split(": ");
+      String activityId1 = parts[0];
+      if (activityId1.equals(activityId)) {
+        activityCount++;
+      }
+    }
+    if (activityCount == 0) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
   }
 
   public void displayReviews(String activityId) {
