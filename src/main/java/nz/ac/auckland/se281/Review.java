@@ -1,26 +1,28 @@
 package nz.ac.auckland.se281;
 
 public abstract class Review {
-    protected String reviewId;
-    protected String reviewerName;
-    protected int rating;
-    protected String reviewText;
+  // Fields
+  protected String reviewId;
+  protected String reviewerName;
+  protected int rating;
+  protected String reviewText;
 
-    public Review(String reviewId, String reviewerName, int rating, String reviewText) {
-        this.reviewId = reviewId;
-        this.reviewerName = reviewerName;
-        this.rating = rating;
-        this.reviewText = reviewText;
-    }
+  // Constructor
 
-    public String getReviewId() {
-        return reviewId;
-    }
+  public Review(String reviewId, String reviewerName, int rating, String reviewText) {
+    this.reviewId = reviewId;
+    this.reviewerName = reviewerName;
+    this.rating = rating;
+    this.reviewText = reviewText;
+  }
 
-    public int getRating() {
-        return rating;
-    }
+  public String getReviewId() {
+    return reviewId;
+  }
 
-    public abstract String gettype();
+  public int getRating() {
+    return rating;
+  }
 
+  public abstract String gettype();
 }
