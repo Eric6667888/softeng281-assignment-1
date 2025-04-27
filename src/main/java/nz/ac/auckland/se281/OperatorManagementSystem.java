@@ -604,49 +604,73 @@ public class OperatorManagementSystem {
       String locationFullName = location.getFullName();
       int count = 0;
       String topActivity = null;
-      int averageRating = 0;
+      
       int topRating = 0;
+      int topTotalReview = 0;
+      int topTotalRating = 0;
 
       for (int i = 0; i < activityNumber.size(); i++) {
         String[] parts = activityNumber.get(i).split(": ");
         String activityId = parts[0];
+        int numberOfReviews = reviewCount.getOrDefault(activityId, 0);
+        if (numberOfReviews == 0) {
+          continue;
+        }
 
         if (reviewCount.get(activityId) == null) {
           continue;
         }
-        String reviewID = activityId + "-R" + reviewCount.get(activityId);
-        String[] reviewInfo = reviewInformation.get(reviewID);
-        if (reviewInfo == null) {
+        String[] idParts = activityId.split("-");
+        String locationAbbr = idParts[1];
+
+
+        if (!location.getLocationAbbreviation().equals(locationAbbr)) {
           continue;
         }
-        if (reviewType.get(reviewID) == "Public") {
-          int rating = Integer.parseInt(reviewInfo[2]);
-          if (rating > topRating) {
-            topRating = rating;
-            averageRating += rating;
-            topActivity = activityIDName.get(activityId);
-          }
-        } else if (reviewType.get(reviewID) == "Private") {
-          continue;
-        } else if (reviewType.get(reviewID) == "Expert") {
-          int rating = Integer.parseInt(reviewInfo[1]);
-          if (rating > topRating) {
-            topRating = rating;
-            averageRating += rating;
-            topActivity = activityIDName.get(activityId);
+
+        int totalRating = 0;
+        int countRating = 0;
+        for (int j = 1; j <= numberOfReviews; j++) {
+          String reviewId = activityId + "-R" + j;
+          String[] reviewInfo = reviewInformation.get(reviewId);
+          if (reviewType.get(reviewId).equals("Public")) {
+            totalRating += Integer.parseInt(reviewInfo[2]);
+            countRating++;
+          } else if (reviewType.get(reviewId).equals("Private")) {
+            continue;
+          } else if (reviewType.get(reviewId).equals("Expert")) {
+            totalRating += Integer.parseInt(reviewInfo[1]);
+            countRating++;
+            
           }
         }
+        if (countRating == 0) {
+          continue;
+        }
+        int average = totalRating / countRating;
+
+        int topAvgRating = 0;
+        if (!(topTotalReview == 0)) {
+          topAvgRating = topRating / topTotalReview;
+        }
+
+        if (average > topAvgRating) {
+          topActivity = activityIDName.get(activityId);
+          topTotalReview = countRating;
+          topTotalRating = totalRating;
+          
+        }   
+        
         
 
         count++;
       }
-      if (count > 0) {
-        averageRating = averageRating / count;
-      }
+
 
       if (count == 0) {
         MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(locationFullName);
       } else {
+        int averageRating = topTotalRating / topTotalReview;
         MessageCli.TOP_ACTIVITY.printMessage(locationFullName, topActivity, String.valueOf(averageRating));
       }
     }
