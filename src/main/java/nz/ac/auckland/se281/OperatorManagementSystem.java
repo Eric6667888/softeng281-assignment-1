@@ -600,6 +600,53 @@ public class OperatorManagementSystem {
   }
 
   public void displayTopActivities() {
-    // TODO implement
+    for (Types.Location location : Types.Location.values()) {
+      String locationFullName = location.getFullName();
+      int count = 0;
+      String topActivity = null;
+      int averageRating = 0;
+      int topRating = 0;
+
+      for (int i = 0; i < activityNumber.size(); i++) {
+        String[] parts = activityNumber.get(i).split(": ");
+        String activityId = parts[0];
+
+        if (reviewCount.get(activityId) == null) {
+          continue;
+        }
+        String reviewID = activityId + "-R" + reviewCount.get(activityId);
+        String[] reviewInfo = reviewInformation.get(reviewID);
+        if (reviewInfo == null) {
+          continue;
+        }
+        if (reviewType.get(reviewID) == "Public") {
+          int rating = Integer.parseInt(reviewInfo[2]);
+          if (rating > topRating) {
+            topRating = rating;
+            averageRating += rating;
+            topActivity = activityIDName.get(activityId);
+          }
+        } else if (reviewType.get(reviewID) == "Private") {
+          continue;
+        } else if (reviewType.get(reviewID) == "Expert") {
+          int rating = Integer.parseInt(reviewInfo[1]);
+          if (rating > topRating) {
+            topRating = rating;
+            averageRating += rating;
+            topActivity = activityIDName.get(activityId);
+          }
+        }
+        
+
+        count++;
+      }
+      averageRating /= count;
+
+      if (count == 0) {
+        MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(locationFullName);
+      } else {
+        MessageCli.TOP_ACTIVITY.printMessage(topActivity, String.valueOf(averageRating));
+      }
+    }
   }
 }
