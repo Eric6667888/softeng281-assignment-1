@@ -406,8 +406,6 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
-    // Check if the rating is between 1 and 5
-    // If not, set it to 1 or 5 accordingly
     
     int count = reviewCount.getOrDefault(activityId, 0) + 1;
     reviewCount.put(activityId, count);
@@ -426,7 +424,39 @@ public class OperatorManagementSystem {
   }
 
   public void displayReviews(String activityId) {
-    // TODO implement
+    // Check if the activity ID is valid
+    // If not, print an error message and return
+    int activityCount = 0;
+    for (int i = 0; i < activityNumber.size(); i++) {
+      String [] parts = activityNumber.get(i).split(": ");
+      String activityId1 = parts[0];
+      if (activityId1.equals(activityId)) {
+        activityCount++;
+      }
+    }
+    if (activityCount == 0) {
+      MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
+      return;
+    }
+
+    // Check if the activity ID has reviews
+    // If not, print an error message and return
+    int reviewCount = 0;
+    for (int i = 0; i < this.reviewId.size(); i++) {
+      String [] parts = this.reviewId.get(i).split("-R");
+      String activityId1 = parts[0];
+      if (activityId1.equals(activityId)) {
+        reviewCount++;
+      }
+    }
+    if (reviewCount == 0) {
+      MessageCli.REVIEWS_FOUND.printMessage("are", "no", "s", activityIDName.get(activityId));
+      return;
+    } else if (reviewCount == 1) {
+      MessageCli.REVIEWS_FOUND.printMessage("is", "1", "s", activityIDName.get(activityId));
+    } else {
+      MessageCli.REVIEWS_FOUND.printMessage("are", String.valueOf(reviewCount), "s", activityIDName.get(activityId));
+    }
   }
 
   public void endorseReview(String reviewId) {
