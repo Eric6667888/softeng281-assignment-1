@@ -8,7 +8,8 @@ public class OperatorManagementSystem {
   private Map<String, Integer> locationCounts = new HashMap<>(); // locationFullname, operator count
   private Map<String, Integer> activityCounts = new HashMap<>(); // operatorID, activity count
   private Map<String, String> activityIDName = new HashMap<>(); // activityID, activity name
-  private Map<String, String> operatorsNameMap = new HashMap<>(); // operator abbreviation, operator name
+  private Map<String, String> operatorsNameMap =
+      new HashMap<>(); // operator abbreviation, operator name
   private Map<String, Integer> reviewCount = new HashMap<>(); // activityID, review count
   private Map<String, String[]> reviewInformation = new HashMap<>(); // reviewID, review information
   private Map<String, String> reviewType = new HashMap<>(); // reviewID, type
@@ -16,16 +17,14 @@ public class OperatorManagementSystem {
   private Map<String, String> reviewResponse = new HashMap<>(); // reviewID, Response
   private Map<String, String> reviewImage = new HashMap<>(); // reviewID, image name
 
-
-  private ArrayList<String> operators = new ArrayList<>(); // operatorName operatorNumber locationFullname
+  private ArrayList<String> operators =
+      new ArrayList<>(); // operatorName operatorNumber locationFullname
   private ArrayList<String> operatorNameArray = new ArrayList<>(); // operatorName
   private ArrayList<String> operatorNumber = new ArrayList<>(); // operatorNumber
   private ArrayList<String> locationFullname = new ArrayList<>(); // locationFullname
   private ArrayList<String> activityNumber = new ArrayList<>(); //
   private ArrayList<String> activityName = new ArrayList<>();
   private ArrayList<String> reviewId = new ArrayList<>();
-
-  
 
   // Do not change the parameters of the constructor
   public OperatorManagementSystem() {}
@@ -122,8 +121,6 @@ public class OperatorManagementSystem {
     int count = locationCounts.getOrDefault(locationFull, 0) + 1;
     locationCounts.put(locationFull, count);
 
-    
-
     // Format the count to be 3 digits with leading zeros
     String locationCountResult = String.format("%03d", count);
 
@@ -166,7 +163,6 @@ public class OperatorManagementSystem {
     for (int i = 0; i < activityNumber.size(); i++) {
       if (activityNumber.get(i).contains(operatorId)) {
         count++;
-        
       }
     }
     if (count == 0) {
@@ -185,19 +181,15 @@ public class OperatorManagementSystem {
           if (operatorNumber.get(o).equals(operatorId)) {
             operatorPosition = o;
             break;
-
           }
-
         }
         String[] parts = activityNumber.get(i).split(": ");
         String activityId = parts[0];
         String activityType = parts[1];
-        MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorNameArray.get(operatorPosition));
+        MessageCli.ACTIVITY_ENTRY.printMessage(
+            activityName.get(i), activityId, activityType, operatorNameArray.get(operatorPosition));
       }
     }
-
-
-    
   }
 
   public void createActivity(String activityName, String activityType, String operatorId) {
@@ -218,9 +210,7 @@ public class OperatorManagementSystem {
       if (operatorNumber.get(i).equals(operatorId)) {
         operatorPosition = i;
         break;
-
       }
-
     }
 
     int count = activityCounts.getOrDefault(operatorId, 0) + 1;
@@ -231,9 +221,11 @@ public class OperatorManagementSystem {
 
     this.activityName.add(activityName);
     activityNumber.add(operatorId + "-" + activityCountResult + ": " + activityType);
-    MessageCli.ACTIVITY_CREATED.printMessage(activityName, operatorId + "-" + activityCountResult, activityType, operatorNameArray.get(operatorPosition));
-
-
+    MessageCli.ACTIVITY_CREATED.printMessage(
+        activityName,
+        operatorId + "-" + activityCountResult,
+        activityType,
+        operatorNameArray.get(operatorPosition));
   }
 
   public void searchActivities(String keyword) {
@@ -256,15 +248,16 @@ public class OperatorManagementSystem {
       }
 
       for (int i = 0; i < activityNumber.size(); i++) {
-        
+
         String[] parts = activityNumber.get(i).split(": ");
         String activityId = parts[0];
         String activityType = parts[1];
         String[] operatorParts = activityId.split("-");
         String operatorId = operatorParts[0];
-        
+
         String operatorFullName = operatorsNameMap.get(operatorId);
-        MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorFullName);
+        MessageCli.ACTIVITY_ENTRY.printMessage(
+            activityName.get(i), activityId, activityType, operatorFullName);
       }
       return;
     }
@@ -273,22 +266,22 @@ public class OperatorManagementSystem {
       int count = 0;
       for (int i = 0; i < activityNumber.size(); i++) {
 
-        String [] parts = activityNumber.get(i).split(": ");
+        String[] parts = activityNumber.get(i).split(": ");
         String activityId = parts[0];
         String activityType = parts[1];
 
-        String [] operatorParts = activityId.split("-");
+        String[] operatorParts = activityId.split("-");
         String operatorId = operatorParts[0];
         String operatorFullName = operatorsNameMap.get(operatorId);
 
         String locationabbreviation = operatorParts[1];
         Types.Location locationEnum = Types.Location.fromString(locationabbreviation);
 
-        
-        
-
-
-        if (activityName.get(i).toLowerCase().contains(keyword.toLowerCase()) || activityId.toLowerCase().contains(keyword.toLowerCase()) || activityType.toLowerCase().contains(keyword.toLowerCase()) || operatorFullName.toLowerCase().contains(keyword.toLowerCase())  || locationEnum.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
+        if (activityName.get(i).toLowerCase().contains(keyword.toLowerCase())
+            || activityId.toLowerCase().contains(keyword.toLowerCase())
+            || activityType.toLowerCase().contains(keyword.toLowerCase())
+            || operatorFullName.toLowerCase().contains(keyword.toLowerCase())
+            || locationEnum.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
           count++;
         }
       }
@@ -302,7 +295,7 @@ public class OperatorManagementSystem {
       }
 
       for (int i = 0; i < activityNumber.size(); i++) {
-        String [] parts = activityNumber.get(i).split(": ");
+        String[] parts = activityNumber.get(i).split(": ");
         String activityId = parts[0];
         String activityType = parts[1];
         String[] operatorParts = activityId.split("-");
@@ -311,22 +304,24 @@ public class OperatorManagementSystem {
 
         String locationabbreviation = operatorParts[1];
         Types.Location locationEnum = Types.Location.fromString(locationabbreviation);
-        if (activityName.get(i).toLowerCase().contains(keyword.toLowerCase()) || activityId.toLowerCase().contains(keyword.toLowerCase()) || activityType.toLowerCase().contains(keyword.toLowerCase()) || operatorFullName.toLowerCase().contains(keyword.toLowerCase())  || locationEnum.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
-          MessageCli.ACTIVITY_ENTRY.printMessage(activityName.get(i), activityId, activityType, operatorFullName);
-        }
-          
+        if (activityName.get(i).toLowerCase().contains(keyword.toLowerCase())
+            || activityId.toLowerCase().contains(keyword.toLowerCase())
+            || activityType.toLowerCase().contains(keyword.toLowerCase())
+            || operatorFullName.toLowerCase().contains(keyword.toLowerCase())
+            || locationEnum.getFullName().toLowerCase().contains(keyword.toLowerCase())) {
+          MessageCli.ACTIVITY_ENTRY.printMessage(
+              activityName.get(i), activityId, activityType, operatorFullName);
         }
       }
     }
-    
-  
+  }
 
   public void addPublicReview(String activityId, String[] options) {
     // Check if the activity ID is valid
     // If not, print an error message and return
     int activityCount = 0;
     for (int i = 0; i < activityNumber.size(); i++) {
-      String [] parts = activityNumber.get(i).split(": ");
+      String[] parts = activityNumber.get(i).split(": ");
       String activityId1 = parts[0];
       if (activityId1.equals(activityId)) {
         activityCount++;
@@ -336,13 +331,13 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
-    
+
     // Check if the rating is between 1 and 5
     // If not, set it to 1 or 5 accordingly
-    
+
     int count = reviewCount.getOrDefault(activityId, 0) + 1;
     reviewCount.put(activityId, count);
-    
+
     this.reviewId.add(activityId + "-R" + count);
     String reviewId = activityId + "-R" + count;
 
@@ -352,16 +347,8 @@ public class OperatorManagementSystem {
 
     reviewEndorse.put(reviewId, false);
 
-
-      
-      
-    
-
-
     // Print the Created Operator message(success message)
     MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, activityIDName.get(activityId));
-    
-    
   }
 
   public void addPrivateReview(String activityId, String[] options) {
@@ -369,7 +356,7 @@ public class OperatorManagementSystem {
     // If not, print an error message and return
     int activityCount = 0;
     for (int i = 0; i < activityNumber.size(); i++) {
-      String [] parts = activityNumber.get(i).split(": ");
+      String[] parts = activityNumber.get(i).split(": ");
       String activityId1 = parts[0];
       if (activityId1.equals(activityId)) {
         activityCount++;
@@ -381,18 +368,16 @@ public class OperatorManagementSystem {
     }
     // Check if the rating is between 1 and 5
     // If not, set it to 1 or 5 accordingly
-    
+
     int count = reviewCount.getOrDefault(activityId, 0) + 1;
     reviewCount.put(activityId, count);
-    
+
     this.reviewId.add(activityId + "-R" + count);
     String reviewId = activityId + "-R" + count;
 
     reviewInformation.put(reviewId, options);
 
     reviewType.put(reviewId, "Private");
-
-    
 
     // Print the Created Operator message(success message)
     MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, activityIDName.get(activityId));
@@ -403,7 +388,7 @@ public class OperatorManagementSystem {
     // If not, print an error message and return
     int activityCount = 0;
     for (int i = 0; i < activityNumber.size(); i++) {
-      String [] parts = activityNumber.get(i).split(": ");
+      String[] parts = activityNumber.get(i).split(": ");
       String activityId1 = parts[0];
       if (activityId1.equals(activityId)) {
         activityCount++;
@@ -413,18 +398,16 @@ public class OperatorManagementSystem {
       MessageCli.REVIEW_NOT_ADDED_INVALID_ACTIVITY_ID.printMessage(activityId);
       return;
     }
-    
+
     int count = reviewCount.getOrDefault(activityId, 0) + 1;
     reviewCount.put(activityId, count);
-    
+
     this.reviewId.add(activityId + "-R" + count);
     String reviewId = activityId + "-R" + count;
 
     reviewInformation.put(reviewId, options);
 
     reviewType.put(reviewId, "Expert");
-
-    
 
     // Print the Created Operator message(success message)
     MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, activityIDName.get(activityId));
@@ -435,7 +418,7 @@ public class OperatorManagementSystem {
     // If not, print an error message and return
     int activityCount = 0;
     for (int i = 0; i < activityNumber.size(); i++) {
-      String [] parts = activityNumber.get(i).split(": ");
+      String[] parts = activityNumber.get(i).split(": ");
       String activityId1 = parts[0];
       if (activityId1.equals(activityId)) {
         activityCount++;
@@ -450,7 +433,7 @@ public class OperatorManagementSystem {
     // If not, print an error message and return
     int reviewCount = 0;
     for (int i = 0; i < this.reviewId.size(); i++) {
-      String [] parts = this.reviewId.get(i).split("-R");
+      String[] parts = this.reviewId.get(i).split("-R");
       String activityId1 = parts[0];
       if (activityId1.equals(activityId)) {
         reviewCount++;
@@ -462,11 +445,12 @@ public class OperatorManagementSystem {
     } else if (reviewCount == 1) {
       MessageCli.REVIEWS_FOUND.printMessage("is", "1", "", activityIDName.get(activityId));
     } else {
-      MessageCli.REVIEWS_FOUND.printMessage("are", String.valueOf(reviewCount), "s", activityIDName.get(activityId));
+      MessageCli.REVIEWS_FOUND.printMessage(
+          "are", String.valueOf(reviewCount), "s", activityIDName.get(activityId));
     }
 
     for (int i = 0; i < this.reviewId.size(); i++) {
-      String [] parts = this.reviewId.get(i).split("-R");
+      String[] parts = this.reviewId.get(i).split("-R");
       String activityId1 = parts[0];
       if (activityId1.equals(activityId)) {
         String reviewId = this.reviewId.get(i);
@@ -474,7 +458,8 @@ public class OperatorManagementSystem {
         String reviewType = this.reviewType.get(reviewId);
         if (reviewType.equals("Public")) {
           if (reviewInfo[1].equals("n")) {
-            MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
+            MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+                reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
             MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
             if (reviewEndorse.get(reviewId)) {
               MessageCli.REVIEW_ENTRY_ENDORSED.printMessage();
@@ -482,7 +467,8 @@ public class OperatorManagementSystem {
             return;
           }
           if (reviewInfo[1].equals("y")) {
-            MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, "Anonymous");
+            MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+                reviewInfo[2], "5", reviewType, reviewId, "Anonymous");
             MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
             if (reviewEndorse.get(reviewId)) {
               MessageCli.REVIEW_ENTRY_ENDORSED.printMessage();
@@ -490,7 +476,8 @@ public class OperatorManagementSystem {
             return;
           }
         } else if (reviewType.equals("Private")) {
-          MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
+          MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+              reviewInfo[2], "5", reviewType, reviewId, reviewInfo[0]);
           MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[3]);
           if (reviewResponse.get(reviewId) == null) {
             if (reviewInfo[4].equals("y")) {
@@ -505,10 +492,10 @@ public class OperatorManagementSystem {
             MessageCli.REVIEW_ENTRY_RESOLVED.printMessage(reviewResponse.get(reviewId));
             return;
           }
-          
-            
+
         } else if (reviewType.equals("Expert")) {
-          MessageCli.REVIEW_ENTRY_HEADER.printMessage(reviewInfo[1], "5", reviewType, reviewId, reviewInfo[0]);
+          MessageCli.REVIEW_ENTRY_HEADER.printMessage(
+              reviewInfo[1], "5", reviewType, reviewId, reviewInfo[0]);
           MessageCli.REVIEW_ENTRY_REVIEW_TEXT.printMessage(reviewInfo[2]);
           if (reviewInfo[3].equals("y")) {
             MessageCli.REVIEW_ENTRY_RECOMMENDED.printMessage();
@@ -522,7 +509,6 @@ public class OperatorManagementSystem {
             }
             return;
           }
-          
         }
       }
     }
@@ -546,7 +532,7 @@ public class OperatorManagementSystem {
     }
 
     reviewEndorse.put(reviewId, true);
-    MessageCli.REVIEW_ENDORSED.printMessage(reviewId);      
+    MessageCli.REVIEW_ENDORSED.printMessage(reviewId);
   }
 
   public void resolveReview(String reviewId, String response) {
@@ -568,7 +554,6 @@ public class OperatorManagementSystem {
 
     reviewResponse.put(reviewId, response);
     MessageCli.REVIEW_RESOLVED.printMessage(reviewId);
-    
   }
 
   public void uploadReviewImage(String reviewId, String imageName) {
@@ -593,13 +578,9 @@ public class OperatorManagementSystem {
     } else {
       String existingImage = reviewImage.get(reviewId);
       reviewImage.put(reviewId, existingImage + "," + imageName);
-
     }
 
-
     MessageCli.REVIEW_IMAGE_ADDED.printMessage(imageName, reviewId);
-
-    
   }
 
   public void displayTopActivities() {
@@ -607,7 +588,7 @@ public class OperatorManagementSystem {
       String locationFullName = location.getFullName();
       int count = 0;
       String topActivity = null;
-      
+
       int topRating = 0;
       int topTotalReview = 0;
       int topTotalRating = 0;
@@ -626,7 +607,6 @@ public class OperatorManagementSystem {
         String[] idParts = activityId.split("-");
         String locationAbbr = idParts[1];
 
-
         if (!location.getLocationAbbreviation().equals(locationAbbr)) {
           continue;
         }
@@ -644,7 +624,6 @@ public class OperatorManagementSystem {
           } else if (reviewType.get(reviewId).equals("Expert")) {
             totalRating += Integer.parseInt(reviewInfo[1]);
             countRating++;
-            
           }
         }
         if (countRating == 0) {
@@ -661,20 +640,17 @@ public class OperatorManagementSystem {
           topActivity = activityIDName.get(activityId);
           topTotalReview = countRating;
           topTotalRating = totalRating;
-          
-        }   
-        
-        
+        }
 
         count++;
       }
-
 
       if (count == 0) {
         MessageCli.NO_REVIEWED_ACTIVITIES.printMessage(locationFullName);
       } else {
         int averageRating = topTotalRating / topTotalReview;
-        MessageCli.TOP_ACTIVITY.printMessage(locationFullName, topActivity, String.valueOf(averageRating));
+        MessageCli.TOP_ACTIVITY.printMessage(
+            locationFullName, topActivity, String.valueOf(averageRating));
       }
     }
   }
