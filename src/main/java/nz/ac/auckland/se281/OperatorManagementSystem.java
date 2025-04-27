@@ -16,6 +16,7 @@ public class OperatorManagementSystem {
   private Map<String, Boolean> reviewEndorse = new HashMap<>(); // reviewID, endorsement status
   private Map<String, String> reviewResponse = new HashMap<>(); // reviewID, Response
   private Map<String, String> reviewImage = new HashMap<>(); // reviewID, image name
+  private Map<String, Review> reviews = new HashMap<>(); // reviewID, review object
 
   private ArrayList<String> operators =
       new ArrayList<>(); // operatorName operatorNumber locationFullname
@@ -377,6 +378,12 @@ public class OperatorManagementSystem {
 
     // Print the Created Operator message(success message)
     MessageCli.REVIEW_ADDED.printMessage("Public", reviewId, activityIDName.get(activityId));
+
+    boolean isAnonymous = options[1].equals("y");
+    reviews.put(
+        reviewId,
+        new PublicReview(
+            reviewId, options[0], Integer.parseInt(options[2]), options[3], isAnonymous));
   }
 
   public void addPrivateReview(String activityId, String[] options) {
@@ -409,6 +416,12 @@ public class OperatorManagementSystem {
 
     // Print the Created Operator message(success message)
     MessageCli.REVIEW_ADDED.printMessage("Private", reviewId, activityIDName.get(activityId));
+
+    boolean followUp = options[4].equals("y");
+    reviews.put(
+        reviewId,
+        new PrivateReview(
+            reviewId, options[0], Integer.parseInt(options[2]), options[3], options[1], followUp));
   }
 
   public void addExpertReview(String activityId, String[] options) {
@@ -441,6 +454,12 @@ public class OperatorManagementSystem {
 
     // Print the Created Operator message(success message)
     MessageCli.REVIEW_ADDED.printMessage("Expert", reviewId, activityIDName.get(activityId));
+
+    boolean wouldRecommend = options[3].equals("y");
+    reviews.put(
+        reviewId,
+        new ExpertReview(
+            reviewId, options[0], Integer.parseInt(options[1]), options[2], wouldRecommend));
   }
 
   public void displayReviews(String activityId) {
