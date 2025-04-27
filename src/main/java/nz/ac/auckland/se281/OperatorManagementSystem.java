@@ -589,7 +589,7 @@ public class OperatorManagementSystem {
       reviewImage.put(reviewId, imageName);
     } else {
       String existingImage = reviewImage.get(reviewId);
-      reviewImage.put(reviewId, existingImage + ", " + imageName);
+      reviewImage.put(reviewId, existingImage + "," + imageName);
 
     }
 
